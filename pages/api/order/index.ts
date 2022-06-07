@@ -8,7 +8,7 @@ import methods from "micro-method-router";
 //db mockeada
 const products = {
   123: {
-    title: "mouse",
+    title: "mouse para el marce",
     price: 100,
   },
   1234: {

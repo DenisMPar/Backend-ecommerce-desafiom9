@@ -32,7 +32,8 @@ export async function generatePreference(productData, orderId) {
       pending: "https://apx.school/pending",
     },
     external_reference: orderId,
-    notification_url: "https://pagos-rouge.vercel.app/api/webhooks/mercadopago",
+    notification_url:
+      "https://backend-ecommerce-desafiom9.vercel.app/ipn/mercadopago",
   };
 
   const res = await mercadopago.preferences.create(preferenceData);
