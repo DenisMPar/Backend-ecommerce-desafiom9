@@ -1,0 +1,7 @@
+.vercel
+.next
+node_modules
+.env.local
+testUsers.js
+preferencia.js
+response.json

@@ -1,0 +1,35 @@
+{
+  "name": "vercel-api",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "git@github.com:DenisMPar/vercel-api.git",
+  "author": "DenisMPar <paradadenismartin@gmail.com>",
+  "license": "MIT",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next"
+  },
+  "dependencies": {
+    "@sendgrid/mail": "^7.6.2",
+    "@types/mercadopago": "^1.5.6",
+    "airtable": "^0.11.4",
+    "algoliasearch": "^4.13.1",
+    "date-fns": "^2.28.0",
+    "firebase-admin": "^10.2.0",
+    "jsonwebtoken": "^8.5.1",
+    "mercadopago": "^1.5.13",
+    "micro": "^9.3.4",
+    "micro-method-router": "^0.1.0",
+    "next": "^12.1.4",
+    "parse-bearer-token": "^1.0.1",
+    "random-seed": "^0.3.0",
+    "react": "^18.0.0",
+    "react-dom": "^18.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^17.0.23",
+    "@types/react": "^18.0.1",
+    "typescript": "^4.6.3"
+  }
+}
