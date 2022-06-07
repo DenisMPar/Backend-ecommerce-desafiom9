@@ -17,3 +17,12 @@ export async function searchProducts(query, limit, offset) {
     },
   };
 }
+
+export async function getProductById(id: string) {
+  try {
+    const product = await productsIndex.getObject(id);
+    return product;
+  } catch (error) {
+    throw { message: error.message, status: error.status };
+  }
+}
