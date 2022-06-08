@@ -33,7 +33,7 @@ export async function generatePreference(productData, orderId) {
     },
     external_reference: orderId,
     notification_url:
-      "https://backend-ecommerce-desafiom9.vercel.app/ipn/mercadopago",
+      "https://backend-ecommerce-desafiom9.vercel.app/api/ipn/mercadopago",
   };
 
   const res = await mercadopago.preferences.create(preferenceData);
