@@ -20,7 +20,9 @@ export async function orderPaymentNotification(id) {
     await myOrder.pull();
     myOrder.data.status = "closed";
     await myOrder.push();
+    console.log("compra exitosa");
     return true;
+
     //send email "tu compra fue exitosa"
     //email interno "alguien realizo una compra"
   } else {
