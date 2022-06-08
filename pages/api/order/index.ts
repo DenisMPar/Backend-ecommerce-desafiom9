@@ -1,7 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { authMiddleware } from "lib/middlewares";
 import { getUserData } from "controllers/users";
-import { generateOrder } from "controllers/orders";
+import { generateOrder, orderProductById } from "controllers/orders";
 import { generatePreference } from "lib/mercadopago";
 import methods from "micro-method-router";
 
@@ -23,25 +23,15 @@ async function postHandler(
   userData
 ) {
   const { productId } = req.query as any;
-  const data = req.body;
-
-  //debo checkear si existe el producto en la db
-  const product = products[productId];
-  if (!product) {
-    return res.status(400).send({ messagge: "El producto no existe" });
+  try {
+    const response = await orderProductById({
+      productId,
+      userId: userData.userId,
+    });
+    res.send(response);
+  } catch (error) {
+    res.send({ message: error });
   }
-  //traigo la data del user para sumarla a la orden de compra
-  const user = await getUserData(userData.userId);
-
-  //creo la orden en la db con la data del producto y del user
-  const orderData = { user, productData: product, additionalInfo: data };
-  const order = await generateOrder(orderData);
-
-  //un vez creada la orden genero la preferencia en mercadoPago
-  const preference = await generatePreference(order.data.productData, order.id);
-
-  //retorno el url de pago
-  res.send({ url: preference.init_point });
 }
 
 const handler = methods({

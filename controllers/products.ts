@@ -6,11 +6,13 @@ export async function searchProducts(query, limit, offset) {
     length: limit,
     offset,
   });
+  const hitsResults = hits.hits as any;
+  const results = hitsResults.filter((hit) => hit.In_stock);
 
   return {
-    results: hits.hits,
+    results: results,
     pagination: {
-      results: hits.hits.length,
+      results: results.length,
       offset,
       limit,
       total: hits.nbHits,

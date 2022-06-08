@@ -18,17 +18,17 @@ export async function generatePreference(productData, orderId) {
   const preferenceData = {
     items: [
       {
-        title: productData.title,
-        description: "La mejor merch de la web",
-        picture_url: "http://www.myapp.com/myimage.jpg",
+        title: productData.Name,
+        description: productData.Description,
+        picture_url: productData.Images.url,
         category_id: "152984",
         quantity: 1,
         currency_id: "ARS" as Currency,
-        unit_price: productData.price,
+        unit_price: productData.Price,
       },
     ],
     back_urls: {
-      succes: "https://apx.school",
+      success: "https://apx.school",
       pending: "https://apx.school/pending",
     },
     external_reference: orderId,
