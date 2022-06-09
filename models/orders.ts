@@ -23,4 +23,14 @@ export class Order {
     newOrder.data = data;
     return newOrder;
   }
+  static async getUserOrdersById(userId) {
+    const ordersRef = collection.where("user.id", "==", userId);
+    const ordersQuery = await ordersRef.get();
+    let results = [];
+    ordersQuery.forEach((result) => {
+      results.push({ ...result.data(), orderId: result.id });
+    });
+
+    return results;
+  }
 }

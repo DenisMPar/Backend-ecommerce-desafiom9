@@ -14,6 +14,17 @@ export async function generateOrder(data) {
   return order;
 }
 
+export async function getOrderById(id) {
+  const order = new Order(id);
+  await order.pull();
+
+  return order.data;
+}
+export async function getUserOrders(userId) {
+  const userOrders = await Order.getUserOrdersById(userId);
+  return userOrders;
+}
+
 export async function orderProductById({ productId, userId }) {
   const product = await getProductById(productId);
 
@@ -30,7 +41,7 @@ export async function orderProductById({ productId, userId }) {
     const preference = await generatePreference(product, order.id);
 
     //retorno el url de pago
-    return preference.init_point;
+    return { url: preference.init_point, orderId: order.id };
   } catch (error) {
     return error;
   }
@@ -47,21 +58,22 @@ export async function orderPaymentNotification(id) {
     await myOrder.pull();
     myOrder.data.status = "closed";
     await myOrder.push();
-    console.log(myOrder);
-
     const mail = {
-      message: `Tu pago ha sido acreditado`,
+      message: `Tu pago de $${myOrder.data.Price} por la compra de ${myOrder.data.Name} ha sido acreditado, gracias por tu compra`,
       from: process.env.SENDGRID_EMAIL,
       to: myOrder.data.user.email,
       subject: "Pago exitoso",
     };
 
     await sendMail(mail);
-
+    const mail2 = {
+      message: `Se recibio un pago de $${myOrder.data.Price} por la compra de ${myOrder.data.Name}, numero de orden ${myOrder.id} `,
+      from: process.env.SENDGRID_EMAIL,
+      to: "ecommerce@ventas.com",
+      subject: "Pago exitoso",
+    };
+    await sendMail(mail2);
     return "compra exitosa";
-
-    //send email "tu compra fue exitosa"
-    //email interno "alguien realizo una compra"
   } else {
     return false;
   }
