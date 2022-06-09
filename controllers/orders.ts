@@ -58,14 +58,16 @@ export async function orderPaymentNotification(id) {
     await myOrder.pull();
     myOrder.data.status = "closed";
     await myOrder.push();
-    const mail = {
-      message: `Tu pago de $${myOrder.data.Price} por la compra de ${myOrder.data.Name} ha sido acreditado, gracias por tu compra`,
-      from: process.env.SENDGRID_EMAIL,
-      to: myOrder.data.user.email,
-      subject: "Pago exitoso",
-    };
+    console.log(myOrder.data);
 
-    await sendMail(mail);
+    // const mail = {
+    //   message: `Tu pago de $${myOrder.data.Price} por la compra de ${myOrder.data.Name} ha sido acreditado, gracias por tu compra`,
+    //   from: process.env.SENDGRID_EMAIL,
+    //   to: myOrder.data.user.email,
+    //   subject: "Pago exitoso",
+    // };
+
+    // await sendMail(mail);
     const mail2 = {
       message: `Se recibio un pago de $${myOrder.data.Price} por la compra de ${myOrder.data.Name}, numero de orden ${myOrder.id} `,
       from: process.env.SENDGRID_EMAIL,
