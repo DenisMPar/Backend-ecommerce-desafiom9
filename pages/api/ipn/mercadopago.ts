@@ -6,7 +6,7 @@ export default async function (req: NextApiRequest, res: NextApiResponse) {
   const { id, topic } = req.query;
 
   if (topic == "merchant_order") {
-    const check = await orderPaymentNotification(id);
+    const check = await orderPaymentNotification(id as string);
     console.log(check);
   }
   res.send("ok");

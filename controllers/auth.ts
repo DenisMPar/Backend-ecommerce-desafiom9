@@ -25,7 +25,7 @@ export async function findOrCreateAuth(email: string): Promise<Auth> {
 }
 
 //envia el codigo de autenticacion al mail
-export async function sendCode(email: string) {
+export async function sendCode(email: string): Promise<string> {
   const auth = await findOrCreateAuth(email);
   //genero el codigo random
   const code = randomIntFromInterval(10000, 100000);
@@ -52,7 +52,10 @@ export async function sendCode(email: string) {
   }
 }
 //checkeo el codigo del user
-export async function checkUserCode(email, code) {
+export async function checkUserCode(
+  email: string,
+  code: number
+): Promise<string> {
   const auth = await Auth.FindByEmailAndCode(email, code);
   if (!auth) {
     throw "Código o email incorrectos";

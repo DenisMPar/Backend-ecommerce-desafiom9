@@ -14,13 +14,13 @@ export async function generateOrder(data) {
   return order;
 }
 
-export async function getOrderById(id) {
+export async function getOrderById(id: string) {
   const order = new Order(id);
   await order.pull();
 
   return order.data;
 }
-export async function getUserOrders(userId) {
+export async function getUserOrders(userId: string) {
   const userOrders = await Order.getUserOrdersById(userId);
   return userOrders;
 }
@@ -49,7 +49,9 @@ export async function orderProductById({ productId, userId }) {
   //creo la orden en la db con la data del producto y del user
 }
 
-export async function orderPaymentNotification(id) {
+export async function orderPaymentNotification(
+  id: string
+): Promise<string | boolean> {
   const order = await getMerchantOrder(id);
   //si la orden de MP tiene el status paid, modifico la orden interna de la db y notifico al user del pago exitoso
   if (order.order_status == "paid") {

@@ -1,6 +1,6 @@
 import { productsIndex } from "lib/algolia";
 
-export async function searchProducts(query, limit, offset) {
+export async function searchProducts(query, limit, offset): Promise<object> {
   //trae los resultados de algolia
   const hits = await productsIndex.search(query, {
     length: limit,
