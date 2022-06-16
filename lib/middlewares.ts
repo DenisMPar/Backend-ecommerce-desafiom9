@@ -22,7 +22,7 @@ export function authMiddleware(callback) {
 
 export function schemaMiddleware(schema: yup.AnyObjectSchema, callback) {
   return async function (req: NextApiRequest, res: NextApiResponse, userData) {
-    if (req.body.email || req.body.name) {
+    if (Object.keys(req.body).length > 0) {
       try {
         await schema.validate(req.body);
         return callback(req, res, userData);
@@ -34,17 +34,3 @@ export function schemaMiddleware(schema: yup.AnyObjectSchema, callback) {
     }
   };
 }
-// export function schemaWithAutenticationMiddleware(
-//   schema: yup.AnyObjectSchema,
-//   callback
-// ) {
-//   return async function (req: NextApiRequest, res: NextApiResponse, userData) {
-//     try {
-//       await schema.validate(req.body);
-//     } catch (error) {
-//       return res.status(400).send({ message: error });
-//     }
-//     console.log("pass");
-//     return callback(req, res, userData);
-//   };
-// }

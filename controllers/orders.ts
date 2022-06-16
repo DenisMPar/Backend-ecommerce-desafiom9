@@ -61,14 +61,12 @@ export async function orderPaymentNotification(
     myOrder.data.status = "closed";
     await myOrder.push();
     console.log(myOrder.data);
-
     const mail = {
       message: `Tu pago de $${myOrder.data.productData.Price} por la compra de ${myOrder.data.productData.Name} ha sido acreditado, gracias por tu compra`,
       from: process.env.SENDGRID_EMAIL,
       to: myOrder.data.user.email,
       subject: "Pago exitoso",
     };
-
     await sendMail(mail);
     const mail2 = {
       message: `Se recibio un pago de $${myOrder.data.productData.Price} por la compra de ${myOrder.data.productData.Name}, numero de orden ${myOrder.id} `,
@@ -78,6 +76,19 @@ export async function orderPaymentNotification(
     };
     await sendMail(mail2);
     return "compra exitosa";
+  } else if (order.order_status == "payment_in_process") {
+    const orderId = order.external_reference;
+    const myOrder = new Order(orderId);
+    await myOrder.pull();
+    console.log(myOrder.data);
+    const mail = {
+      message: `Tu pago de $${myOrder.data.productData.Price} por la compra de ${myOrder.data.productData.Name} esta siendo procesado, te avisaremos por mail cuando se haga efectivo`,
+      from: process.env.SENDGRID_EMAIL,
+      to: myOrder.data.user.email,
+      subject: "Pago pendiente",
+    };
+    await sendMail(mail);
+    return "pago en proceso";
   } else {
     return false;
   }

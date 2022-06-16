@@ -1,21 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { authMiddleware } from "lib/middlewares";
-import { getUserData } from "controllers/users";
-import { generateOrder, orderProductById } from "controllers/orders";
-import { generatePreference } from "lib/mercadopago";
+import { orderProductById } from "controllers/orders";
 import methods from "micro-method-router";
-
-//db mockeada
-const products = {
-  123: {
-    title: "mouse para el marce",
-    price: 100,
-  },
-  1234: {
-    title: "teclado",
-    price: 150,
-  },
-};
 
 async function postHandler(
   req: NextApiRequest,
