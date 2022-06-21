@@ -18,7 +18,11 @@ export async function getOrderById(id: string) {
   const order = new Order(id);
   await order.pull();
 
-  return order.data;
+  if (order.data) {
+    return order.data;
+  } else {
+    throw "La orden no existe";
+  }
 }
 export async function getUserOrders(userId: string) {
   const userOrders = await Order.getUserOrdersById(userId);

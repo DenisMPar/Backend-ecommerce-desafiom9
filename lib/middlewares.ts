@@ -34,3 +34,19 @@ export function schemaMiddleware(schema: yup.AnyObjectSchema, callback) {
     }
   };
 }
+export function querySchemaMiddleware(schema: yup.StringSchema, callback) {
+  return async function (req: NextApiRequest, res: NextApiResponse, userData) {
+    if (Object.keys(req.query).length > 0) {
+      try {
+        await schema.validate(req.query.address);
+        return callback(req, res, userData);
+      } catch (error) {
+        return res.status(400).send({ message: error });
+      }
+    } else {
+      return res
+        .status(400)
+        .send({ message: "Debes enviar datos en la query" });
+    }
+  };
+}
