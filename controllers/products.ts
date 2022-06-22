@@ -1,11 +1,12 @@
-import { productsIndex } from "lib/algolia";
+import { Product } from "models/products";
 
-export async function searchProducts(query, limit, offset): Promise<object> {
+export async function searchProducts(
+  query: string,
+  limit: number,
+  offset: number
+): Promise<object> {
   //trae los resultados de algolia
-  const hits = await productsIndex.search(query, {
-    length: limit,
-    offset,
-  });
+  const hits = await Product.getProductsByQuery({ query, limit, offset });
   const hitsResults = hits.hits as any;
   const results = hitsResults.filter((hit) => hit.In_stock);
 
@@ -21,10 +22,7 @@ export async function searchProducts(query, limit, offset): Promise<object> {
 }
 
 export async function getProductById(id: string) {
-  try {
-    const product = await productsIndex.getObject(id);
-    return product;
-  } catch (error) {
-    throw { message: error.message, status: error.status };
-  }
+  const product = new Product(id);
+  await product.pull();
+  return product.data;
 }

@@ -53,47 +53,53 @@ export async function orderProductById({ productId, userId }) {
   //creo la orden en la db con la data del producto y del user
 }
 
+async function sendOrderPaidMail(order) {
+  const orderId = order.external_reference;
+  const myOrder = new Order(orderId);
+  await myOrder.pull();
+  myOrder.data.status = "closed";
+  await myOrder.push();
+
+  const mail = {
+    message: `Tu pago de $${myOrder.data.productData.Price} por la compra de ${myOrder.data.productData.Name} ha sido acreditado, gracias por tu compra`,
+    from: process.env.SENDGRID_EMAIL,
+    to: myOrder.data.user.email,
+    subject: "Pago exitoso",
+  };
+  await sendMail(mail);
+  const mail2 = {
+    message: `Se recibio un pago de $${myOrder.data.productData.Price} por la compra de ${myOrder.data.productData.Name}, numero de orden ${myOrder.id} `,
+    from: process.env.SENDGRID_EMAIL,
+    to: "ecommerce@ventas.com",
+    subject: "Pago exitoso",
+  };
+  await sendMail(mail2);
+  return "compra exitosa";
+}
+
+async function sendOrderInProcessMail(order) {
+  const orderId = order.external_reference;
+  const myOrder = new Order(orderId);
+  await myOrder.pull();
+  const mail = {
+    message: `Tu pago de $${myOrder.data.productData.Price} por la compra de ${myOrder.data.productData.Name} esta siendo procesado, te avisaremos por mail cuando se haga efectivo`,
+    from: process.env.SENDGRID_EMAIL,
+    to: myOrder.data.user.email,
+    subject: "Pago pendiente",
+  };
+  await sendMail(mail);
+  return "pago en proceso";
+}
+
 export async function orderPaymentNotification(
   id: string
 ): Promise<string | boolean> {
+  const actions = {
+    paid: sendOrderPaidMail,
+    payment_in_process: sendOrderInProcessMail,
+  };
   const order = await getMerchantOrder(id);
-  //si la orden de MP tiene el status paid, modifico la orden interna de la db y notifico al user del pago exitoso
-  if (order.order_status == "paid") {
-    const orderId = order.external_reference;
-    const myOrder = new Order(orderId);
-    await myOrder.pull();
-    myOrder.data.status = "closed";
-    await myOrder.push();
-    console.log(myOrder.data);
-    const mail = {
-      message: `Tu pago de $${myOrder.data.productData.Price} por la compra de ${myOrder.data.productData.Name} ha sido acreditado, gracias por tu compra`,
-      from: process.env.SENDGRID_EMAIL,
-      to: myOrder.data.user.email,
-      subject: "Pago exitoso",
-    };
-    await sendMail(mail);
-    const mail2 = {
-      message: `Se recibio un pago de $${myOrder.data.productData.Price} por la compra de ${myOrder.data.productData.Name}, numero de orden ${myOrder.id} `,
-      from: process.env.SENDGRID_EMAIL,
-      to: "ecommerce@ventas.com",
-      subject: "Pago exitoso",
-    };
-    await sendMail(mail2);
-    return "compra exitosa";
-  } else if (order.order_status == "payment_in_process") {
-    const orderId = order.external_reference;
-    const myOrder = new Order(orderId);
-    await myOrder.pull();
-    console.log(myOrder.data);
-    const mail = {
-      message: `Tu pago de $${myOrder.data.productData.Price} por la compra de ${myOrder.data.productData.Name} esta siendo procesado, te avisaremos por mail cuando se haga efectivo`,
-      from: process.env.SENDGRID_EMAIL,
-      to: myOrder.data.user.email,
-      subject: "Pago pendiente",
-    };
-    await sendMail(mail);
-    return "pago en proceso";
-  } else {
-    return false;
-  }
+
+  const action = actions[order.order_status];
+  return action ? await action(order) : false;
 }
