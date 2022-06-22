@@ -20,10 +20,13 @@ export function authMiddleware(callback) {
   };
 }
 
+//middleware que checkea el body
 export function schemaMiddleware(schema: yup.AnyObjectSchema, callback) {
   return async function (req: NextApiRequest, res: NextApiResponse, userData) {
+    //reviso si el body viene vacio
     if (Object.keys(req.body).length > 0) {
       try {
+        //valido el body
         await schema.validate(req.body);
         return callback(req, res, userData);
       } catch (error) {
@@ -34,10 +37,14 @@ export function schemaMiddleware(schema: yup.AnyObjectSchema, callback) {
     }
   };
 }
+
+//middleware que checkea el query
 export function querySchemaMiddleware(schema: yup.StringSchema, callback) {
   return async function (req: NextApiRequest, res: NextApiResponse, userData) {
+    //reviso si el query viene vacio
     if (Object.keys(req.query).length > 0) {
       try {
+        //valido el query
         await schema.validate(req.query.address);
         return callback(req, res, userData);
       } catch (error) {

@@ -11,10 +11,9 @@ import * as yup from "yup";
 let bodySchema = yup
   .object()
   .shape({
-    email: yup.string().email().notRequired(),
+    email: yup.string().email(),
     name: yup.string(),
   })
-  .required()
   .noUnknown(true)
   .strict();
 let querySchema = yup

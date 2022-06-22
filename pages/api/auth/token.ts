@@ -1,6 +1,4 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import { generate } from "lib/jwt";
-import { Auth } from "models/auth";
 import { checkUserCode } from "controllers/auth";
 import methods from "micro-method-router";
 import { schemaMiddleware } from "lib/middlewares";

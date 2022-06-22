@@ -16,6 +16,8 @@ export class User {
   async push() {
     this.ref.update(this.data);
   }
+
+  //crea un nuevo user en la db
   static async createNewUser(data) {
     const userSnap = await collection.add(data);
     const newUser = new User(userSnap.id);

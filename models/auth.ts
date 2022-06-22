@@ -10,12 +10,12 @@ export class Auth {
     this.id = id;
     this.ref = collection.doc(id);
   }
-  //trae la data desde la db
+
   async pull() {
     const snap = await this.ref.get();
     this.data = snap.data();
   }
-  //sube la data a la db
+
   async push() {
     this.ref.update(this.data);
   }
@@ -26,7 +26,7 @@ export class Auth {
     const after = isAfter(expires, now);
     return after;
   }
-  //invalida el codigo usado comabiando su fecha de expiracion
+  //invalida el codigo usado cambiando su fecha de expiracion
   async invalidateCode() {
     this.data.expires = new Date();
     await this.push();

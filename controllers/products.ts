@@ -5,7 +5,7 @@ export async function searchProducts(
   limit: number,
   offset: number
 ): Promise<object> {
-  //trae los resultados de algolia
+  //trae los resultados del model
   const hits = await Product.getProductsByQuery({ query, limit, offset });
   const hitsResults = hits.hits as any;
   const results = hitsResults.filter((hit) => hit.In_stock);

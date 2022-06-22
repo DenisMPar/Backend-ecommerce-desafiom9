@@ -49,11 +49,10 @@ export async function orderProductById({ productId, userId }) {
   } catch (error) {
     return error;
   }
-
-  //creo la orden en la db con la data del producto y del user
 }
 
-async function sendOrderPaidMail(order) {
+//cambia el status de la orden a cerrado y manda el mail al user y al interno
+async function handlePaidOrder(order) {
   const orderId = order.external_reference;
   const myOrder = new Order(orderId);
   await myOrder.pull();
@@ -66,8 +65,7 @@ async function sendOrderPaidMail(order) {
     to: myOrder.data.user.email,
     subject: "Pago exitoso",
   };
-  const response = await sendMail(mail);
-  console.log(response);
+  await sendMail(mail);
 
   const mail2 = {
     message: `Se recibio un pago de $${myOrder.data.productData.Price} por la compra de ${myOrder.data.productData.Name}, numero de orden ${myOrder.id} `,
@@ -79,7 +77,7 @@ async function sendOrderPaidMail(order) {
   return "compra exitosa";
 }
 
-async function sendOrderInProcessMail(order) {
+async function handleInProcessOrder(order) {
   const orderId = order.external_reference;
   const myOrder = new Order(orderId);
   await myOrder.pull();
@@ -96,9 +94,10 @@ async function sendOrderInProcessMail(order) {
 export async function orderPaymentNotification(
   id: string
 ): Promise<string | boolean> {
+  //objeto con las funciones a ejecutar segun el order status
   const actions = {
-    paid: sendOrderPaidMail,
-    payment_in_process: sendOrderInProcessMail,
+    paid: handlePaidOrder,
+    payment_in_process: handleInProcessOrder,
   };
   const order = await getMerchantOrder(id);
 
