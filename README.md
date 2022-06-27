@@ -4,7 +4,7 @@ Registra y loguea a los usuarios con el metodo Passwordless.
 Permite la busqueda de productos y genera ordenes de compra a traves de MercadoPago.
 
 Link a la api:
-https://backend-ecommerce-desafiom9.vercel.app/
+https://backend-ecommerce-desafiom9.vercel.app/api
 
 Link a la documentación en postman:
 https://documenter.getpostman.com/view/17176367/UzBpL6MM
