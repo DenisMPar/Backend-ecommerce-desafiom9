@@ -28,4 +28,16 @@ export class Product {
 
     return hits;
   }
+  static async getAll() {
+    let hits = [];
+    await productsIndex.browseObjects({
+      query: "", // Empty query will match all records
+
+      batch: (batch) => {
+        hits = hits.concat(batch);
+      },
+    });
+
+    return await hits;
+  }
 }

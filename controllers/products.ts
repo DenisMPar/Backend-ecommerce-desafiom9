@@ -26,3 +26,10 @@ export async function getProductById(id: string) {
   await product.pull();
   return product.data;
 }
+export async function getAllProductsId() {
+  const products = await Product.getAll();
+  const ids = products.map((prod) => {
+    return prod.objectID;
+  });
+  return ids;
+}
