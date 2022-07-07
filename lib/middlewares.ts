@@ -2,6 +2,7 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import parseBearerToken from "parse-bearer-token";
 import { decode } from "lib/jwt";
 import * as yup from "yup";
+import { NextRequest } from "next/server";
 
 //middleware que autentica el token
 export function authMiddleware(callback) {
