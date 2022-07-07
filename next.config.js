@@ -4,7 +4,8 @@ module.exports = {
     return [
       {
         source: "/api/:path*",
-        destination: "https://backend-ecommerce-desafiom9.vercel.app/:path*",
+        destination:
+          "https://backend-ecommerce-desafiom9.vercel.app/api/:path*",
       },
     ];
   },
