@@ -16,6 +16,8 @@ let bodySchema = yup
   .shape({
     email: yup.string().email().notRequired(),
     name: yup.string(),
+    address: yup.string(),
+    phone: yup.number(),
   })
   .required()
   .noUnknown(true)
