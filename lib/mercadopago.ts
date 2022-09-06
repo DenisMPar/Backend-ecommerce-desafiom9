@@ -28,8 +28,9 @@ export async function generatePreference(productData, orderId) {
       },
     ],
     back_urls: {
-      success: "https://apx.school",
-      pending: "https://apx.school/pending",
+      success: "https://compraloecommerce.vercel.app/payment/success",
+      pending: "https://compraloecommerce.vercel.app/payment/pending",
+      failure: "https://compraloecommerce.vercel.app/payment/failure",
     },
     external_reference: orderId,
     notification_url:
