@@ -32,3 +32,15 @@ export async function getAllProductsId() {
   });
   return ids;
 }
+export async function getFeaturedProducts() {
+  const hits = await Product.getProductsByQuery({
+    query: "",
+    limit: 2,
+    offset: 0,
+  });
+  const hitsResults = hits.hits as any;
+
+  return {
+    results: hitsResults,
+  };
+}
